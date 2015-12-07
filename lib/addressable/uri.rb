@@ -1595,7 +1595,13 @@ module Addressable
           pair[1] = URI.unencode_component(pair[1].to_str.gsub(/\+/, " "))
         end
         if return_type == Hash
-          accu[pair[0]] = pair[1]
+          if pair[0] =~ /\[\s*\]\z/
+            accu[pair[0]] ||= []
+            accu[pair[0]] << pair[1]
+          else
+            accu[pair[0]] = pair[1]
+          end
+
         else
           accu << pair
         end
